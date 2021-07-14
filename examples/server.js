@@ -1,4 +1,5 @@
 const express = require('express');
+const a = require('express');
 const bodyParser = require('body-parser');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -26,9 +27,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const router = express.Router();
 
 router.get('/simple/get', function(req, res) {
-  res.json({
-    msg: 'hello world',
-  });
+  res.json(req.query);
+});
+
+router.get('/base/get', function(req, res) {
+  res.json(req.query);
 });
 
 app.use(router);
