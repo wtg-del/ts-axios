@@ -82,6 +82,10 @@ router.get('/extend/user', function(req, res) {
   })
 });
 
+router.get('/interceptor/get', function(req, res) {
+  res.json({ msg: 'hello world' });
+});
+
 app.use(router);
 
 const port = process.env.PORT || 8080;

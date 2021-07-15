@@ -6,7 +6,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
   processConfig(config);
   return xhr(config).then((res) => {
     return tranformResponseData(res);
-  })
+  });
 };
 
 function processConfig(config: AxiosRequestConfig): void {
