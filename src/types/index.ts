@@ -14,17 +14,15 @@ export type Method =
 'patch' |
 'PATCH';
 
-
-export type Header = Record<string, string>;
-
 export interface AxiosRequestConfig {
   url?: string;
   method?: Method;
   data?: any;
   params?: any;
-  headers?: Header;
+  headers?: any;
   responseType?: XMLHttpRequestResponseType;
   timeout?: number;
+  [x: string]: any;
 };
 
 
@@ -49,6 +47,7 @@ export interface AxiosError<T = any> extends Error {
   response?: AxiosResponse<T>;
 };
 export interface Axios {
+  defaults: AxiosRequestConfig;
   interceptors: {
     request: AxiosInterceptorManger<AxiosRequestConfig>;
     response: AxiosInterceptorManger<AxiosResponse>;

@@ -1,5 +1,4 @@
 const express = require('express');
-const a = require('express');
 const bodyParser = require('body-parser');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -86,10 +85,15 @@ router.get('/interceptor/get', function(req, res) {
   res.json({ msg: 'hello world' });
 });
 
+router.post('/config/post', function(req, res) {
+  res.json(req.body);
+});
+
 app.use(router);
 
 const port = process.env.PORT || 8080;
 
 module.exports = app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
+  const url = ` http://localhost:${port}`;
+  console.log(`Server listening on ${url}`);
 });

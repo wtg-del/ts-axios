@@ -1,11 +1,11 @@
 // import a from 'axios';
-import { isPlainObject } from './util';
-import { Header } from '../types';
+import { Method } from '../types';
+import { deepMerge, isPlainObject } from './util';
 
 const contentType = 'Content-Type';
 const json = 'application/json;charet=utf-8';
 
-function normalizeHeaderNam(hedaer: Header, normalizeName: string): void {
+function normalizeHeaderNam(hedaer: any, normalizeName: string): void {
   if (!hedaer) return;
 
   Object.keys(hedaer).forEach(name => {
@@ -16,7 +16,7 @@ function normalizeHeaderNam(hedaer: Header, normalizeName: string): void {
   });
 }
 
-export function processHeaders(headers: Header, data: any): Header {
+export function processHeaders(headers: any, data: any): any {
   normalizeHeaderNam(headers, contentType);
 
   if (isPlainObject(data) && headers && !headers[contentType]) {
@@ -45,4 +45,17 @@ export function parseHeader(headers: string): Record<string, unknown> {
   });
 
   return parsed;
+};
+
+export function flattenHeaders(headers: any, method: Method): any {
+  if (!headers) return headers;
+
+  headers = deepMerge(headers.common, headers[method], headers);
+
+  const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common'];
+  methodsToDelete.forEach(m => {
+    delete headers[m];
+  });
+
+  return headers;
 }
