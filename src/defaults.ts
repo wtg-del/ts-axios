@@ -1,4 +1,5 @@
-import { AxiosRequestConfig, Method } from "./types";
+import { AxiosRequestConfig, Method } from './types'
+import { processHeaders, tranformRequest, tranformResponse } from './helpers'
 
 const defaults: AxiosRequestConfig = {
   method: 'get',
@@ -7,21 +8,33 @@ const defaults: AxiosRequestConfig = {
 
   headers: {
     common: {
-      Accept: 'application/json, text/plain, */*',
-    },
+      Accept: 'application/json, text/plain, */*'
+    }
   },
-};
 
-const methodsNoData: Method[] =  ['delete', 'get', 'head', 'options'];
+  transformRequest: [
+    function(data: any, headers: any): any {
+      processHeaders(headers, data)
+      return tranformRequest(data)
+    }
+  ],
+  transformResponse: [
+    function(data: any): any {
+      return tranformResponse(data)
+    }
+  ]
+}
+
+const methodsNoData: Method[] = ['delete', 'get', 'head', 'options']
 methodsNoData.forEach(method => {
-  defaults.headers[method] = {};
-});
+  defaults.headers[method] = {}
+})
 
-const methoddWithData: Method[] = ['post', 'put', 'patch'];
+const methoddWithData: Method[] = ['post', 'put', 'patch']
 methoddWithData.forEach(method => {
   defaults.headers[method] = {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/x-www-form-urlencoded'
   }
-});
+})
 
-export default defaults;
+export default defaults
