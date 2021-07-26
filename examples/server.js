@@ -4,6 +4,9 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('./webpack.config');
+const cookieParser = require('cookie-parser');
+
+require('./server2');
 
 const app = express();
 const compiler = webpack(webpackConfig);
@@ -22,6 +25,7 @@ app.use(express.static(__dirname));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const router = express.Router();
 
@@ -100,6 +104,10 @@ router.post('/cancel/post', function(req, res) {
     res.json(req.body);
   }, 1000);
 });
+
+router.get('/more/get', function(req, res) {
+  res.json(req.cookies)
+})
 
 app.use(router);
 
