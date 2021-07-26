@@ -6,8 +6,7 @@ import {
   Axios as AxiosType,
   Method,
   ResolvedFn,
-  RejectFn,
-  AxiosInterceptorManger
+  RejectFn
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManger from './InterceptorManger'

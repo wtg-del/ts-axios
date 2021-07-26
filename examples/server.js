@@ -21,7 +21,11 @@ app.use(webpackDevMiddleware(compiler, {
 
 app.use(webpackHotMiddleware(compiler));
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, {
+  setHeaders(res) {
+    res.cookie('XSRF-TOKEN-D', '1234abc1')
+  }
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,19 +33,19 @@ app.use(cookieParser());
 
 const router = express.Router();
 
-router.get('/simple/get', function(req, res) {
+router.get('/simple/get', function (req, res) {
   res.json(req.query);
 });
 
-router.get('/base/get', function(req, res) {
+router.get('/base/get', function (req, res) {
   res.json(req.query);
 });
 
-router.post('/base/post', function(req, res) {
+router.post('/base/post', function (req, res) {
   res.json(req.body);
 });
 
-router.post('/base/buffer', function(req, res) {
+router.post('/base/buffer', function (req, res) {
   let msg = [];
   req.on('data', chunk => {
     if (chunk) msg.push(chunk);
@@ -53,7 +57,7 @@ router.post('/base/buffer', function(req, res) {
   });
 });
 
-router.get('/error/get', function(req, res) {
+router.get('/error/get', function (req, res) {
   if (Math.random() > 0.5) {
     res.json({ msg: 'hello world' });
   } else {
@@ -62,19 +66,19 @@ router.get('/error/get', function(req, res) {
   }
 });
 
-router.get('/error/timeout', function(req, res) {
+router.get('/error/timeout', function (req, res) {
   setTimeout(() => {
     res.json({ msg: 'hello world' });
   }, 3000);
 });
 
 ['get', 'post', 'delete', 'head', 'options', 'put', 'patch'].forEach(m => {
-  router[m](`/extend/${m}`, function(req, res) {
+  router[m](`/extend/${m}`, function (req, res) {
     res.json({ msg: 'hello world' });
   });
 });
 
-router.get('/extend/user', function(req, res) {
+router.get('/extend/user', function (req, res) {
   res.json({
     code: 0,
     message: 'ok',
@@ -85,27 +89,27 @@ router.get('/extend/user', function(req, res) {
   })
 });
 
-router.get('/interceptor/get', function(req, res) {
+router.get('/interceptor/get', function (req, res) {
   res.json({ msg: 'hello world' });
 });
 
-router.post('/config/post', function(req, res) {
+router.post('/config/post', function (req, res) {
   res.json(req.body);
 });
 
-router.get('/cancel/get', function(req, res) {
+router.get('/cancel/get', function (req, res) {
   setTimeout(() => {
     res.json('hello world');
   }, 1000);
 });
 
-router.post('/cancel/post', function(req, res) {
+router.post('/cancel/post', function (req, res) {
   setTimeout(() => {
     res.json(req.body);
   }, 1000);
 });
 
-router.get('/more/get', function(req, res) {
+router.get('/more/get', function (req, res) {
   res.json(req.cookies)
 })
 
