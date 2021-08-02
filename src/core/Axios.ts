@@ -38,7 +38,7 @@ export default class Axios implements AxiosType {
   private requestMethodWithData(
     method: Method,
     url: string,
-    data?: Record<string, unknown>,
+    data?: any,
     config?: AxiosRequestConfig
   ) {
     return this.request({ ...config, method, url, data })

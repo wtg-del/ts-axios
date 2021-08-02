@@ -1,38 +1,38 @@
-
-const toString = Object.prototype.toString;
+const toString = Object.prototype.toString
 
 export function isDate(val: unknown): val is Date {
-  return toString.call(val) === '[object Date]';
-};
+  return toString.call(val) === '[object Date]'
+}
 
 export function isObject(val: unknown): val is Object {
-  return val !== null && typeof val === 'object';
-};
+  return val !== null && typeof val === 'object'
+}
 
 export function isPlainObject(val: unknown): val is Object {
-  return toString.call(val) === '[object Object]';
-};
+  return toString.call(val) === '[object Object]'
+}
+
+export function isFormDate(val: unknown): val is FormData {
+  return typeof val !== 'undefined' && val instanceof FormData
+}
 
 export function extend<T, U>(to: T, from: U): T & U {
-  for(const key in from) {
-    ;(to as T & U)[key] = from[key] as any;
+  for (const key in from) {
+    ;(to as T & U)[key] = from[key] as any
   }
 
-  return to as T & U;
-};
+  return to as T & U
+}
 
 export function deepMerge(...objs: any[]) {
   return objs.reduce((acc, cur) => {
     Object.entries(cur).forEach(([key, val]) => {
       if (isPlainObject(val)) {
-        acc[key] = isPlainObject(acc[key])
-          ? deepMerge(acc[key], val)
-          : deepMerge(val);
+        acc[key] = isPlainObject(acc[key]) ? deepMerge(acc[key], val) : deepMerge(val)
       } else {
-        acc[key] = val;
+        acc[key] = val
       }
-    });
-    return acc;
-  }, {});
-};
-
+    })
+    return acc
+  }, {})
+}

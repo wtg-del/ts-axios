@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
+const multipart = require('connect-multiparty')
 const webpackConfig = require('./webpack.config');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 require('./server2');
 
@@ -30,6 +32,9 @@ app.use(express.static(__dirname, {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+}))
 
 const router = express.Router();
 
@@ -111,6 +116,11 @@ router.post('/cancel/post', function (req, res) {
 
 router.get('/more/get', function (req, res) {
   res.json(req.cookies)
+})
+
+router.post('/more/upload', function (req, res) {
+  console.log(res.body, req.files)
+  res.end('upload success')
 })
 
 app.use(router);
